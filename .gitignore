@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# MLflow - auto-generated tracking database & run data
+mlruns/
+mlflow.db
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+# IDEs
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (large CSV - do not commit)
+data/hotel_bookings.csv
+
+# Trained model binaries
+models/*.joblib
+models/*.pkl
