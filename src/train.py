@@ -89,7 +89,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR        = PROJECT_ROOT / "data"
 MODELS_DIR      = PROJECT_ROOT / "models"
 ARTIFACTS_DIR   = PROJECT_ROOT / "artifacts"
-SCREENSHOTS_DIR = PROJECT_ROOT / "screenshots"
 
 # Dataset and MLflow settings
 DATASET_FILENAME    = "hotel_bookings.csv"
@@ -117,24 +116,12 @@ def print_section(title: str) -> None:
     print(f"{border}")
 
 
-def print_screenshot_prompt(number: int, title: str, reason: str, visible: str) -> None:
-    """
-    Print a clearly formatted screenshot prompt so the student knows
-    exactly when and what to capture.
-    """
-    print("\n" + "-" * 50)
-    print(f"TAKE SCREENSHOT NOW  - Screenshot {number}")
-    print("-" * 50)
-    print(f"Title  : {title}")
-    print(f"Reason : {reason}")
-    print(f"Show   : {visible}")
-    print("-" * 50 + "\n")
-    input("Press [ENTER] to continue after taking the screenshot...")
+
 
 
 def ensure_directories() -> None:
     """Create all required project directories if they don't already exist."""
-    for directory in [MODELS_DIR, ARTIFACTS_DIR, SCREENSHOTS_DIR]:
+    for directory in [MODELS_DIR, ARTIFACTS_DIR]:
         directory.mkdir(parents=True, exist_ok=True)
     logger.info("Project directories verified / created.")
 
@@ -1123,42 +1110,22 @@ def main() -> None:
     dataset_path = DATA_DIR / DATASET_FILENAME
     df = load_data(dataset_path)
 
-    print_screenshot_prompt(
-        number=4,
-        title="Dataset Successfully Loaded",
-        reason="Confirms the CSV was found, loaded, and has expected shape.",
-        visible="Shape of Dataset, First 5 Rows, Dataset Information",
-    )
+
 
     # Step 2: Analyse missing values
     analyse_missing_values(df)
 
-    print_screenshot_prompt(
-        number=5,
-        title="Missing Values Analysis",
-        reason="Documents the data quality check before preprocessing.",
-        visible="Missing Values per column, Duplicate Count, Data Types",
-    )
+
 
     # Step 3: Preprocess
     X, y, feature_names = preprocess_data(df)
 
-    print_screenshot_prompt(
-        number=6,
-        title="Preprocessing Completed",
-        reason="Shows the dataset is fully cleaned, encoded, and scaled.",
-        visible="Encoding Completed, Scaling Completed, Final Dataset Shape",
-    )
+
 
     # Step 4: Split
     X_train, X_test, y_train, y_test = split_data(X, y)
 
-    print_screenshot_prompt(
-        number=7,
-        title="Training and Testing Split",
-        reason="Confirms 80/20 stratified split.",
-        visible="X_train shape, X_test shape, y_train shape, y_test shape",
-    )
+
 
     # Step 5: Configure MLflow experiment
     print_section("MLFLOW CONFIGURATION")
@@ -1190,12 +1157,7 @@ def main() -> None:
         "run_id": lr_run_id,
     })
 
-    print_screenshot_prompt(
-        number=8,
-        title="Logistic Regression Training Completed",
-        reason="Shows LR model metrics after training.",
-        visible="Accuracy, Precision, Recall, F1 Score, ROC-AUC, Run ID",
-    )
+
 
     # 6b. Decision Tree
     dt_model, dt_metrics, dt_run_id = train_decision_tree(
@@ -1208,12 +1170,7 @@ def main() -> None:
         "run_id": dt_run_id,
     })
 
-    print_screenshot_prompt(
-        number=9,
-        title="Decision Tree Training Completed",
-        reason="Shows Decision Tree metrics after training.",
-        visible="Accuracy, Precision, Recall, F1 Score, ROC-AUC, Run ID",
-    )
+
 
     # 6c. Random Forest
     rf_model, rf_metrics, rf_run_id = train_random_forest(
@@ -1226,22 +1183,12 @@ def main() -> None:
         "run_id": rf_run_id,
     })
 
-    print_screenshot_prompt(
-        number=10,
-        title="Random Forest Training Completed",
-        reason="Shows Random Forest metrics after training.",
-        visible="Accuracy, Precision, Recall, F1 Score, ROC-AUC, Run ID",
-    )
+
 
     # Step 7: Compare models
     best = compare_models(results)
 
-    print_screenshot_prompt(
-        number=11,
-        title="Model Comparison Table",
-        reason="Side-by-side comparison of all three models. Best model highlighted.",
-        visible="Accuracy, Precision, Recall, F1 Score, ROC-AUC for all models + Best Model Name",
-    )
+
 
     # Print best model artifact paths
     print_section("BEST MODEL ARTIFACTS")
@@ -1251,29 +1198,12 @@ def main() -> None:
     print(f"  Confusion Matrix    : {best_cm_path}")
     print(f"  ROC Curve           : {best_roc_path}")
 
-    print_screenshot_prompt(
-        number=12,
-        title="Confusion Matrix - Best Model",
-        reason="Shows how well the best model predicts cancellations.",
-        visible=f"Confusion matrix image for {best['name']}",
-    )
 
-    print_screenshot_prompt(
-        number=13,
-        title="ROC Curve - Best Model",
-        reason="Shows the trade-off between TPR and FPR for the best model.",
-        visible=f"ROC curve image with AUC score for {best['name']}",
-    )
 
     # Step 8: Register best model
     register_best_model(best)
 
-    print_screenshot_prompt(
-        number=16,
-        title="Registered / Saved Best Model",
-        reason="Confirms the best model is registered in MLflow Model Registry.",
-        visible="Registry name, model version, run_id OR models/ directory with saved .joblib",
-    )
+
 
     # Step 9: Final summary
     print_final_summary(results, best)
@@ -1281,12 +1211,7 @@ def main() -> None:
     print("\n  All training, evaluation, and MLflow logging completed.")
     print("  Run 'mlflow ui --backend-store-uri sqlite:///mlflow.db' inside the MLflow_Assignment/ folder to view results.\n")
 
-    print_screenshot_prompt(
-        number=17,
-        title="Final Project Folder Structure",
-        reason="Shows the completed project with all generated files.",
-        visible="All folders: data/, src/, models/, artifacts/, mlruns/, screenshots/",
-    )
+
 
 
 # ===========================================================================
